@@ -5,14 +5,14 @@ import adafruit_fingerprint
 import RPi.GPIO as GPIO  # GPIO library
 
 # Setup GPIO
-RELAY_PIN = 17  # Use GPIO17 (pin 11)
+RELAY_PIN = 17  # Use GPIO17 (pin 11) to control a relay or door lock
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(RELAY_PIN, GPIO.OUT)
 GPIO.output(RELAY_PIN, GPIO.LOW)
 
-# Setup UART communication
-uart = serial.Serial("/dev/serial0", baudrate=57600, timeout=1)
-finger = adafruit_fingerprint.Adafruit_Fingerprint(uart)
+# Setup UART communication (AS608 fingerprint connected to GPIO14/15)
+ser = serial.Serial("/dev/serial0", baudrate=57600, timeout=1)
+finger = adafruit_fingerprint.Adafruit_Fingerprint(ser)  # <<< FIXED: replaced 'uart' with 'ser'
 
 
 def unlock_door():
@@ -124,3 +124,4 @@ if __name__ == "__main__":
         print("\n[CTRL+C] Exiting...")
     finally:
         GPIO.cleanup()
+
